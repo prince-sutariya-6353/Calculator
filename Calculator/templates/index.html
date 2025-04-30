@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLI Styled Calculator</title>
+  <style>
+    body {
+      background-color: #000;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background-color: #111;
+      padding: 20px;
+      border: 2px solid #00ff00;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ff00;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 20px;
+      width: fit-content;
+    }
+
+    #display {
+      background-color: #222;
+      color: #00ff00;
+      font-size: 32px;
+      padding: 15px;
+      text-align: right;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      overflow-x: auto;
+      white-space: nowrap;
+      width: 320px;
+      box-sizing: border-box;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      grid-auto-rows: 60px;
+      gap: 10px;
+    }
+
+    button {
+      font-size: 24px;
+      border: 1px solid #00ff00;
+      background-color: #222;
+      color: #00ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background-color: #333;
+      transform: scale(1.05);
+    }
+
+    .operator,.operator1 {
+      background-color: #0077ff;
+      color: white;
+    }
+.operator1{
+  grid-row: span 2;
+}
+    .clear {
+      background-color: red;
+      color: white;
+    }
+
+    .equal {
+      grid-column: span 2;
+      background-color: green;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div id="display">0</div>
+    <div class="buttons">
+      <button class="clear">C</button>
+      <button class="operator">/</button>
+      <button class="operator">*</button>
+      <button class="operator">-</button>
+
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button class="operator1">+</button>
+
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+
+      <button class="operator">%</button>
+      <button class="equal">=</button>
+
+      <button>0</button>
+      <button>.</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('button');
+    let input = '';
+    const operators = ['+', '-', '*', '/'];
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const value = button.textContent;
+
+        if (value === 'C') {
+          input = '';
+          display.textContent = '0';
+        } else if (value === '=') {
+          try {
+            if (operators.includes(input.slice(-1))) {
+              input = input.slice(0, -1); // Trim last operator
+            }
+            input = eval(input).toString();
+            display.textContent = input;
+          } catch {
+            display.textContent = 'Error';
+            input = '';
+          }
+        } else if (value === '%') {
+          try {
+            input = (eval(input) / 100).toString();
+            display.textContent = input;
+          } catch {
+            display.textContent = 'Error';
+            input = '';
+          }
+        } else {
+          if (display.textContent === '0' && value !== '.') {
+            input = value;
+          } else {
+            input += value;
+          }
+          display.textContent = input;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
